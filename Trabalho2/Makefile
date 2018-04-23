@@ -1,6 +1,6 @@
 FILES=main.cpp
-OUT=run_test
-FLAGS=-std=c++14
+OUT=main
+FLAGS=-std=c++14 -g
 
 all: clean build
 
