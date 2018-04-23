@@ -12,15 +12,14 @@ public:
 
 	void insert(Data d)
 	{
-		v.push_back(d);
+		v.emplace_back(d);
 	}
 
-	int find(Data d)
-	{
+	int find(Data d){
 		for (int i = 0; i < v.size(); i++)
 			if (d == v[i])
 				return i;
-		
+
 		return -1;
 	}
 };

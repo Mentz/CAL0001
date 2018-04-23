@@ -5,22 +5,27 @@
 
 class HashSetD : DataStructure {
 private:
-	std::vector<std::vector<Data>> hv;
+	std::vector<std::vector<Data> > hv;
 	static const int hashSize = 65536;
 	int rndSeed;
 
 	int hash(Data d)
 	{
-		int n, i, j, hash = d.nome.size();
+		int n, i, j;
+		long long hash = d.nome.size();
 		n = hash;
-		for (i = 0; i < n; i++)
-			hash = (hash * (d.nome[i] - 65 + i)) % hashSize;
+		for (i = 0; i < n; i++){
+			hash = (hash * (d.nome[i] - 'a' + i)) % hashSize;
+			if(hash < 0) hash *= -1;
+		}
 
 		n = d.sobrenome.size();
-		for (j = 0; i < n; i++)
-			hash = (hash * (d.nome[i] - 65 + i + j)) % hashSize;
+		for (j = 0; j < n; j++){
+			hash = (hash * (d.nome[i] - 'a' + i + j)) % hashSize;
+			if(hash < 0) hash *= -1;
+		}
 
-		return hash;
+		return hash % hashSize;
 	}
 
 public:
@@ -28,15 +33,15 @@ public:
 	{
 		srand(time(NULL));
 		rndSeed = hashSize + (rand() % hashSize);
-		hv = std::vector<std::vector<Data>>(hashSize, std::vector<Data>(0));
+		hv = std::vector<std::vector<Data>>(hashSize, std::vector<Data>());
 	}
 
 	void insert(Data d)
 	{
 		int h = hash(d);
-		hv[h].push_back(d);
+		hv[h].emplace_back(d);
 	}
-	
+
 	int find(Data d)
 	{
 		int i, h = hash(d);

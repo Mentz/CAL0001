@@ -26,6 +26,12 @@ public:
 	{
 		return (this->nome == b.nome && this->sobrenome == b.sobrenome);
 	}
+
+	void operator = (Data &b){
+		this -> ordem = b.ordem;
+		this -> nome = b.nome;
+		this -> sobrenome = b.sobrenome;
+	}
 };
 
 class DataStructure {

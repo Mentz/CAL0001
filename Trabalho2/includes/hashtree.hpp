@@ -11,14 +11,19 @@ private:
 
 	int hash(Data d)
 	{
-		int n, i, j, hash = d.nome.size();
+		int n, i, j;
+		long long hash = d.nome.size();
 		n = hash;
-		for (i = 0; i < n; i++)
+		for (i = 0; i < n; i++){
 			hash = (rndSeed * hash * (d.nome[i] + i)) % hashSize;
+			if(hash < 0) hash *= -1;
+		}
 
 		n = d.sobrenome.size();
-		for (j = 0; i < n; i++)
+		for (j = 0; i < n; i++){
 			hash = (rndSeed * hash * (d.nome[i] + i + j)) % hashSize;
+			if(hash < 0) hash *= -1;
+		}
 
 		return hash;
 	}

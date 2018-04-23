@@ -31,11 +31,11 @@ int main(int argc, char ** argv)
 	clock_t t0, t1;
 	double times[12] = {0};
 
-	VectorD vec;
-	AVLD avl;
-	HashSetD hset;
-	HashTreeD htree;
-	
+	VectorD vec = VectorD();
+	AVLD avl = AVLD();
+	HashSetD hset = HashSetD();
+	HashTreeD htree = HashTreeD();
+
 	for (int q = 1; q < 6; q++)
 	{
 		// Guardar o arquivo no vetor para desconsiderar tempo de
@@ -45,16 +45,16 @@ int main(int argc, char ** argv)
 		file = std::ifstream(f_path, std::ifstream::in);
 		file >> n;
 		printf("There are %d registries there\n", n);
-		wholeFile = std::vector<Data>(n);
+		wholeFile = std::vector<Data>(n + 5);
 		for (int i = 0; i < n; i++)
 		{
 			file >> d.ordem >> d.nome >> d.sobrenome;
 			wholeFile[i] = d;
 		}
-		
+
 		file >> m;
 		printf("There are %d queries there\n", m);
-		buscas = std::vector<Data>(m);
+		buscas = std::vector<Data>(m + 5);
 		d.ordem = 0;
 		for (int i = 0; i < m; i++)
 		{
@@ -64,16 +64,19 @@ int main(int argc, char ** argv)
 
 		// TODO Embelezar esse código repetido
 		// Vector - Medição da inserção
+
 		t0 = clock();
 		for (int i = 0; i < n; i++)
 			vec.insert(wholeFile[i]);
 		t1 = clock();
 		times[0] = getSeconds(t0, t1);
 
+
 		// Vector - Medição da busca
 		t0 = clock();
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < m; i++){
 			vec.find(buscas[i]);
+		}
 		t1 = clock();
 		times[1] = getSeconds(t0, t1);
 
@@ -88,7 +91,7 @@ int main(int argc, char ** argv)
 
 		// AVL - Medição da busca
 		t0 = clock();
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < m; i++)
 			avl.find(buscas[i]);
 		t1 = clock();
 		times[4] = getSeconds(t0, t1);
@@ -104,7 +107,7 @@ int main(int argc, char ** argv)
 
 		// HashSet - Medição da busca
 		t0 = clock();
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < m; i++)
 			hset.find(buscas[i]);
 		t1 = clock();
 		times[7] = getSeconds(t0, t1);
@@ -120,7 +123,7 @@ int main(int argc, char ** argv)
 
 		// HashTree - Medição da busca
 		t0 = clock();
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < m; i++)
 			htree.find(buscas[i]);
 		t1 = clock();
 		times[10] = getSeconds(t0, t1);
@@ -132,6 +135,7 @@ int main(int argc, char ** argv)
 		std::cout << "Tempos: \n";
 		for (int i = 0; i < 12; i++)
 			std::cout << times[i] << "s" << ((i % 3) == 0 ? "\n":"    ");
+		std::cout << std::endl << std::endl;
 	}
 
 	return 0;

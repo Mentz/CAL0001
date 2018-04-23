@@ -1,6 +1,6 @@
 FILES=main.cpp
 OUT=main
-FLAGS=-std=c++14 -g
+FLAGS=-std=c++17 -g -O2
 
 all: clean build
 
