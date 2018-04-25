@@ -9,7 +9,7 @@ all: clean build
 clean:
 	-rm $(OUTG)
 	-rm $(OUT)
-	-find Tempos/ -type f -delete
+	#-find Tempos/ -type f -delete
 
 build: $(FILE) $(FILEG)
 	g++ -o $(OUTG) $(FILEG) $(FLAGS)
