@@ -6,21 +6,21 @@
 class HashSetD : DataStructure {
 private:
 	std::vector<std::vector<Data> > hv;
-	static const int hashSize = 8193;
+	static const int hashSize = 521;
 	int rndSeed;
 
 	unsigned int hash(Data d)
 	{
 		int n, i, j;
-		unsigned int hash = d.nome.size();
+		unsigned int hash = d.nome.size() + d.sobrenome.size();
 		n = hash;
 		for (i = 0; i < n; i++) {
-			hash = (hash * (d.nome[i] + i) ^ 54059) % hashSize;
+			hash = (hash * (d.nome[i] + i) ^ 8432783) % hashSize;
 		}
 
 		n = d.sobrenome.size();
 		for (j = 0; j < n; j++) {
-			hash = (hash * (d.sobrenome[j] + i + j) ^ 76963) % hashSize;
+			hash = (hash * (d.sobrenome[j] + i + j) ^ 3219757) % hashSize;
 		}
 
 		return hash;
