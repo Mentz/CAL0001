@@ -12,7 +12,7 @@ public:
 
 	void insert(Data d)
 	{
-		v.emplace_back(d);
+		v.emplace_back(d.ordem, d.nome, d.sobrenome);
 	}
 
 	int find(Data d){

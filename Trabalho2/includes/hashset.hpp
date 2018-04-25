@@ -6,26 +6,26 @@
 class HashSetD : DataStructure {
 private:
 	std::vector<std::vector<Data> > hv;
-	static const int hashSize = 65536;
+	static const int hashSize = 2048;
 	int rndSeed;
 
-	int hash(Data d)
+	unsigned int hash(Data d)
 	{
 		int n, i, j;
-		long long hash = d.nome.size();
+		unsigned int hash = d.nome.size();
 		n = hash;
-		for (i = 0; i < n; i++){
-			hash = (hash * (d.nome[i] - 'a' + i)) % hashSize;
-			if(hash < 0) hash *= -1;
+		for (i = 0; i < n; i++) {
+			hash = (hash * (d.nome[i] + i)) % hashSize;
+			hash = (rndSeed * hash) % hashSize;
 		}
 
 		n = d.sobrenome.size();
-		for (j = 0; j < n; j++){
-			hash = (hash * (d.nome[i] - 'a' + i + j)) % hashSize;
-			if(hash < 0) hash *= -1;
+		for (j = 0; j < n; j++) {
+			hash = (hash * (d.sobrenome[j] + i + j)) % hashSize;
+			hash = (rndSeed * hash) % hashSize;
 		}
 
-		return hash % hashSize;
+		return hash;
 	}
 
 public:
@@ -39,7 +39,7 @@ public:
 	void insert(Data d)
 	{
 		int h = hash(d);
-		hv[h].emplace_back(d);
+		hv[h].emplace_back(d.ordem, d.nome, d.sobrenome);
 	}
 
 	int find(Data d)
@@ -47,7 +47,7 @@ public:
 		int i, h = hash(d);
 		for (i = 0; i < hv[h].size(); i++)
 			if (d == hv[h][i])
-				return i;
+				return hv[h][i].ordem;
 
 		return -1;
 	}

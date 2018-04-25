@@ -6,23 +6,23 @@
 class HashTreeD : DataStructure {
 private:
 	std::vector<std::map<std::pair<std::string, std::string>, int> > ht;
-	static const int hashSize = 65536;
+	static const int hashSize = 2048;
 	int rndSeed;
 
-	int hash(Data d)
+	unsigned int hash(Data d)
 	{
 		int n, i, j;
-		long long hash = d.nome.size();
+		unsigned int hash = d.nome.size();
 		n = hash;
 		for (i = 0; i < n; i++){
-			hash = (rndSeed * hash * (d.nome[i] + i)) % hashSize;
-			if(hash < 0) hash *= -1;
+			hash = (hash * (d.nome[i] + i)) % hashSize;
+			hash = (rndSeed * hash) % hashSize;
 		}
 
 		n = d.sobrenome.size();
-		for (j = 0; i < n; i++){
-			hash = (rndSeed * hash * (d.nome[i] + i + j)) % hashSize;
-			if(hash < 0) hash *= -1;
+		for (j = 0; j < n; j++){
+			hash = (hash * (d.sobrenome[j] + i + j)) % hashSize;
+			hash = (rndSeed * hash) % hashSize;
 		}
 
 		return hash;

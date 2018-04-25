@@ -2,6 +2,7 @@
 #define _I_STRUCTS_
 
 #include <string>
+#include <vector>
 #include <map>
 
 class Data {
@@ -22,7 +23,14 @@ public:
 		this->sobrenome = s;
 	}
 
-	int operator==(Data &b)
+	Data(const Data &d)
+	{
+		this->ordem     = d.ordem;
+		this->nome      = d.nome;
+		this->sobrenome = d.sobrenome;
+	}
+
+	int operator == (Data &b)
 	{
 		return (this->nome == b.nome && this->sobrenome == b.sobrenome);
 	}

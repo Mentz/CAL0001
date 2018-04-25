@@ -12,7 +12,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <istream>
 #include <fstream>
 #include <vector>
 #include "includes/structs.hpp"
@@ -24,17 +23,20 @@
 int main(int argc, char ** argv)
 {
 	int n, m;
-	char f_path[150];
+	char f_path[150], s_path1[150], s_path2[150], s_path3[150], s_path4[150];
 	Data d;
 	std::vector<Data> wholeFile, buscas;
 	std::ifstream file;
+	std::ofstream saida1, saida2, saida3, saida4;
 	clock_t t0, t1;
 	double times[12] = {0};
 
-	VectorD vec = VectorD();
-	AVLD avl = AVLD();
-	HashSetD hset = HashSetD();
-	HashTreeD htree = HashTreeD();
+	VectorD vec;
+	AVLD avl;
+	HashSetD hset;
+	HashTreeD htree;
+
+	//DataStructure dat[4] = {vec, avl, hset, htree};
 
 	for (int q = 1; q < 6; q++)
 	{
@@ -44,8 +46,16 @@ int main(int argc, char ** argv)
 		printf("Measuring %s now.\n", f_path);
 		file = std::ifstream(f_path, std::ifstream::in);
 		file >> n;
+		sprintf(s_path1, "Saidas/saida-%d-1.txt", q);
+		sprintf(s_path2, "Saidas/saida-%d-2.txt", q);
+		sprintf(s_path3, "Saidas/saida-%d-3.txt", q);
+		sprintf(s_path4, "Saidas/saida-%d-4.txt", q);
+		saida1 = std::ofstream(s_path1, std::ofstream::out);
+		saida2 = std::ofstream(s_path2, std::ofstream::out);
+		saida3 = std::ofstream(s_path3, std::ofstream::out);
+		saida4 = std::ofstream(s_path4, std::ofstream::out);
 		printf("There are %d registries there\n", n);
-		wholeFile = std::vector<Data>(n + 5);
+		wholeFile = std::vector<Data>(n);
 		for (int i = 0; i < n; i++)
 		{
 			file >> d.ordem >> d.nome >> d.sobrenome;
@@ -54,13 +64,18 @@ int main(int argc, char ** argv)
 
 		file >> m;
 		printf("There are %d queries there\n", m);
-		buscas = std::vector<Data>(m + 5);
+		buscas = std::vector<Data>(m);
 		d.ordem = 0;
 		for (int i = 0; i < m; i++)
 		{
 			file >> d.nome >> d.sobrenome;
 			buscas[i] = d;
 		}
+
+		vec = VectorD();
+		avl = AVLD();
+		hset = HashSetD();
+		htree = HashTreeD();
 
 		// TODO Embelezar esse código repetido
 		// Vector - Medição da inserção
@@ -71,11 +86,10 @@ int main(int argc, char ** argv)
 		t1 = clock();
 		times[0] = getSeconds(t0, t1);
 
-
 		// Vector - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++){
-			vec.find(buscas[i]);
+			saida1 << vec.find(buscas[i]) << "\n";
 		}
 		t1 = clock();
 		times[1] = getSeconds(t0, t1);
@@ -92,7 +106,7 @@ int main(int argc, char ** argv)
 		// AVL - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++)
-			avl.find(buscas[i]);
+			saida2 << avl.find(buscas[i]) << "\n";
 		t1 = clock();
 		times[4] = getSeconds(t0, t1);
 
@@ -108,7 +122,7 @@ int main(int argc, char ** argv)
 		// HashSet - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++)
-			hset.find(buscas[i]);
+			saida3 << hset.find(buscas[i]) << "\n";
 		t1 = clock();
 		times[7] = getSeconds(t0, t1);
 
@@ -124,7 +138,7 @@ int main(int argc, char ** argv)
 		// HashTree - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++)
-			htree.find(buscas[i]);
+			saida4 << htree.find(buscas[i]) << "\n";
 		t1 = clock();
 		times[10] = getSeconds(t0, t1);
 
@@ -134,7 +148,7 @@ int main(int argc, char ** argv)
 		// Imprimir tempos
 		std::cout << "Tempos: \n";
 		for (int i = 0; i < 12; i++)
-			std::cout << times[i] << "s" << ((i % 3) == 0 ? "\n":"    ");
+			std::cout << ((i % 3) == 0 ? "\n":"    ") << times[i] << "s";
 		std::cout << std::endl << std::endl;
 	}
 
