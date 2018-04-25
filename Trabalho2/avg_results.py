@@ -14,7 +14,7 @@ htrins = [0.0000000]*5
 htrfnd = [0.0000000]*5
 htrtot = [0.0000000]*5
 
-m = 1
+m = 1000
 
 for i in range(1, m+1):
 	c = 0

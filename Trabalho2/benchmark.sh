@@ -6,4 +6,4 @@ for i in `seq 1 1000`; do
 	./main > Tempos/raw/run$i.csv
 done
 
-#python avg_results.py
+python avg_results.py

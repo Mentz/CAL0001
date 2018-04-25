@@ -11,14 +11,14 @@ clean:
 	-rm $(OUT)
 	-find Tempos/ -type f -delete
 
-build: $(FILES)
+build: $(FILE) $(FILEG)
 	g++ -o $(OUTG) $(FILEG) $(FLAGS)
 	g++ -o $(OUT) $(FILE) $(FLAGS)
 
 run: $(OUT) $(OUTG)
 	./$(OUTG)
-	./$(OUT)
 	./check_saidas.sh
-	./avg_results.py
+	./$(OUT)
+	./benchmark.sh
 
 .PHONY: all clean build run

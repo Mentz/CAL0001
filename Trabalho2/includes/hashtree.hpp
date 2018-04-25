@@ -51,6 +51,15 @@ public:
 
 		return -1;
 	}
+
+	std::vector<int> get_dist_hash(){
+		std::vector<int> ret(hashSize);
+		int cnt = 0;
+		for(auto &a : ht){
+			ret[cnt++] = a.size();
+		}
+		return ret;
+	}
 };
 
 #endif

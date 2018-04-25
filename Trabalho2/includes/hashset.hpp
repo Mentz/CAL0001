@@ -6,7 +6,7 @@
 class HashSetD : DataStructure {
 private:
 	std::vector<std::vector<Data> > hv;
-	static const int hashSize = 2048;
+	static const int hashSize = 8193;
 	int rndSeed;
 
 	unsigned int hash(Data d)
@@ -15,14 +15,12 @@ private:
 		unsigned int hash = d.nome.size();
 		n = hash;
 		for (i = 0; i < n; i++) {
-			hash = (hash * (d.nome[i] + i)) % hashSize;
-			hash = (rndSeed * hash) % hashSize;
+			hash = (hash * (d.nome[i] + i) ^ 54059) % hashSize;
 		}
 
 		n = d.sobrenome.size();
 		for (j = 0; j < n; j++) {
-			hash = (hash * (d.sobrenome[j] + i + j)) % hashSize;
-			hash = (rndSeed * hash) % hashSize;
+			hash = (hash * (d.sobrenome[j] + i + j) ^ 76963) % hashSize;
 		}
 
 		return hash;
@@ -50,6 +48,15 @@ public:
 				return hv[h][i].ordem;
 
 		return -1;
+	}
+
+	std::vector<int> get_dist_hash(){
+		std::vector<int> ret(hashSize);
+		int cnt = 0;
+		for(auto &a : hv){
+			ret[cnt++] = a.size();
+		}
+		return ret;
 	}
 };
 
