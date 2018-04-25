@@ -23,28 +23,34 @@
 int main(int argc, char ** argv)
 {
 	int n, m;
-	char f_path[150];
+	char f_path[150], s_path1[150], s_path2[150], s_path3[150], s_path4[150];
 	Data d;
 	std::vector<Data> wholeFile, buscas;
 	std::ifstream file;
-	clock_t t0, t1;
-	double times[8] = {0};
+	std::ofstream saida1, saida2, saida3, saida4;
 
 	VectorD vec;
 	AVLD avl;
 	HashSetD hset;
 	HashTreeD htree;
 
-	printf("%s,%s,%s,%s,%s,%s,%s,%s\n",
-			"vet-ins", "vet-fnd", "avl-ins", "avl-fnd",
-			"hst-ins", "hst-fnd", "htr-ins", "htr-fnd");
 	for (int q = 1; q < 6; q++)
 	{
 		// Guardar o arquivo no vetor para desconsiderar tempo de
 		//  leitura de arquivo nos testes das estruturas
 		sprintf(f_path, "Entradas/entrada-%d.txt", q);
+		printf("Rodando %s\n", f_path);
 		file = std::ifstream(f_path, std::ifstream::in);
 		file >> n;
+		sprintf(s_path1, "Saidas/saida-%d-1.txt", q);
+		sprintf(s_path2, "Saidas/saida-%d-2.txt", q);
+		sprintf(s_path3, "Saidas/saida-%d-3.txt", q);
+		sprintf(s_path4, "Saidas/saida-%d-4.txt", q);
+		saida1 = std::ofstream(s_path1, std::ofstream::out);
+		saida2 = std::ofstream(s_path2, std::ofstream::out);
+		saida3 = std::ofstream(s_path3, std::ofstream::out);
+		saida4 = std::ofstream(s_path4, std::ofstream::out);
+		printf("%d registros\n", n);
 		wholeFile = std::vector<Data>(n);
 		for (int i = 0; i < n; i++)
 		{
@@ -53,6 +59,7 @@ int main(int argc, char ** argv)
 		}
 
 		file >> m;
+		printf("%d buscas\n", m);
 		buscas = std::vector<Data>(m);
 		d.ordem = 0;
 		for (int i = 0; i < m; i++)
@@ -67,67 +74,37 @@ int main(int argc, char ** argv)
 		htree = HashTreeD();
 
 		// TODO Embelezar esse código repetido
-		// Vector - Medição da inserção
-
-		t0 = clock();
+		// Vector - inserção
 		for (int i = 0; i < n; i++)
 			vec.insert(wholeFile[i]);
-		t1 = clock();
-		times[0] = getSeconds(t0, t1);
 
-		// Vector - Medição da busca
-		t0 = clock();
+		// Vector - busca
 		for (int i = 0; i < m; i++)
-			vec.find(buscas[i]);
-		t1 = clock();
-		times[1] = getSeconds(t0, t1);
+			saida1 << vec.find(buscas[i]) << "\n";
 
-		// AVL - Medição da inserção
-		t0 = clock();
+		// AVL - inserção
 		for (int i = 0; i < n; i++)
 			avl.insert(wholeFile[i]);
-		t1 = clock();
-		times[2] = getSeconds(t0, t1);
 
-		// AVL - Medição da busca
-		t0 = clock();
+		// AVL - busca
 		for (int i = 0; i < m; i++)
-			avl.find(buscas[i]);
-		t1 = clock();
-		times[3] = getSeconds(t0, t1);
+			saida2 << avl.find(buscas[i]) << "\n";
 
-		// HashSet - Medição da inserção
-		t0 = clock();
+		// HashSet - inserção
 		for (int i = 0; i < n; i++)
 			hset.insert(wholeFile[i]);
-		t1 = clock();
-		times[4] = getSeconds(t0, t1);
 
-		// HashSet - Medição da busca
-		t0 = clock();
+		// HashSet - busca
 		for (int i = 0; i < m; i++)
-			hset.find(buscas[i]);
-		t1 = clock();
-		times[5] = getSeconds(t0, t1);
+			saida3 << hset.find(buscas[i]) << "\n";
 
-		// HashTree - Medição da inserção
-		t0 = clock();
+		// HashTree - inserção
 		for (int i = 0; i < n; i++)
 			htree.insert(wholeFile[i]);
-		t1 = clock();
-		times[6] = getSeconds(t0, t1);
 
-		// HashTree - Medição da busca
-		t0 = clock();
+		// HashTree - busca
 		for (int i = 0; i < m; i++)
-			htree.find(buscas[i]);
-		t1 = clock();
-		times[7] = getSeconds(t0, t1);
-
-		// Imprimir tempos em formato CSV
-		for (int i = 0; i < 8; i++)
-			printf("%s%1.6lf", (i)?",":"", times[i]);
-		printf("\n");
+			saida4 << htree.find(buscas[i]) << "\n";
 	}
 
 	return 0;
