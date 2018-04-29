@@ -36,7 +36,7 @@ public:
 	void insert(Data d)
 	{
 		int h = hash(d);
-		hv[h].push_back(Data(d));
+		hv[h].emplace_back(d);
 	}
 
 	int find(Data d)
