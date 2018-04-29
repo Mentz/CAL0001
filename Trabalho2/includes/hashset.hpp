@@ -7,20 +7,21 @@ class HashSetD : DataStructure {
 private:
 	std::vector<std::vector<Data> > hv;
 	static const int hashSize = 521;
-	int rndSeed;
 
 	unsigned int hash(Data d)
 	{
 		int n, i, j;
-		unsigned int hash = d.nome.size() + d.sobrenome.size();
+		unsigned int hash = d.nome.size();
 		n = hash;
 		for (i = 0; i < n; i++) {
-			hash = (hash * (d.nome[i] + i) ^ 8432783) % hashSize;
+			hash = (hash * (d.nome[i] + i) ^ 843273) % hashSize;
+			if (hash < 0) hash = -hash;
 		}
 
 		n = d.sobrenome.size();
 		for (j = 0; j < n; j++) {
-			hash = (hash * (d.sobrenome[j] + i + j) ^ 3219757) % hashSize;
+			hash = (hash * (d.sobrenome[j] + i + j) ^ 321757) % hashSize;
+			if (hash < 0) hash = -hash;
 		}
 
 		return hash;
@@ -29,15 +30,13 @@ private:
 public:
 	HashSetD()
 	{
-		srand(time(NULL));
-		rndSeed = hashSize + (rand() % hashSize);
 		hv = std::vector<std::vector<Data>>(hashSize, std::vector<Data>());
 	}
 
 	void insert(Data d)
 	{
 		int h = hash(d);
-		hv[h].emplace_back(d.ordem, d.nome, d.sobrenome);
+		hv[h].push_back(Data(d));
 	}
 
 	int find(Data d)

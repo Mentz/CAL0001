@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+from sys import argv
 import csv
 
 vetins = [0.0000000]*5
@@ -14,7 +15,10 @@ htrins = [0.0000000]*5
 htrfnd = [0.0000000]*5
 htrtot = [0.0000000]*5
 
-m = 10
+if len(argv)>1:
+	m = int(argv[1])
+else:
+	m = 10
 
 for i in range(1, m+1):
 	c = 0
@@ -49,22 +53,21 @@ for i in range(0, 5):
 	htrfnd[i] /= m
 	htrtot[i] /= m
 
-with open("Tempos/media.csv", "w") as outfile:
-	fieldnames = ['teste','vet-ins','vet-fnd','vet-tot','avl-ins','avl-fnd','avl-tot','hst-ins','hst-fnd','hst-tot','htr-ins','htr-fnd','htr-tot']
-	outcsv = csv.DictWriter(outfile, fieldnames=fieldnames)
-	outcsv.writeheader()
-	for i in range(0, 5):
-		outcsv.writerow(
-			{'teste': str(i + 1),
-			'vet-ins': str.format("%1.6f" % vetins[i]),
-			'vet-fnd': str.format("%1.6f" % vetfnd[i]),
-			'vet-tot': str.format("%1.6f" % vettot[i]),
-			'avl-ins': str.format("%1.6f" % avlins[i]),
-			'avl-fnd': str.format("%1.6f" % avlfnd[i]),
-			'avl-tot': str.format("%1.6f" % avltot[i]),
-			'hst-ins': str.format("%1.6f" % hstins[i]),
-			'hst-fnd': str.format("%1.6f" % hstfnd[i]),
-			'hst-tot': str.format("%1.6f" % hsttot[i]),
-			'htr-ins': str.format("%1.6f" % htrins[i]),
-			'htr-fnd': str.format("%1.6f" % htrfnd[i]),
-			'htr-tot': str.format("%1.6f" % htrtot[i])})
+
+# Impressao para stdout dos valores de saida
+print("teste vet-ins vet-fnd vet-tot avl-ins avl-fnd avl-tot hst-ins hst-fnd hst-tot htr-ins htr-fnd htr-tot")
+for i in range(0, 5):
+	print("%s %s %s %s %s %s %s %s %s %s %s %s %s" % (
+		str(i + 1),
+		str.format("%1.6f" % vetins[i]),
+		str.format("%1.6f" % vetfnd[i]),
+		str.format("%1.6f" % vettot[i]),
+		str.format("%1.6f" % avlins[i]),
+		str.format("%1.6f" % avlfnd[i]),
+		str.format("%1.6f" % avltot[i]),
+		str.format("%1.6f" % hstins[i]),
+		str.format("%1.6f" % hstfnd[i]),
+		str.format("%1.6f" % hsttot[i]),
+		str.format("%1.6f" % htrins[i]),
+		str.format("%1.6f" % htrfnd[i]),
+		str.format("%1.6f" % htrtot[i])))

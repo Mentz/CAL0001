@@ -30,43 +30,40 @@ int main(int argc, char ** argv)
 	std::ifstream file;
 
 	HashSetD hset;
-	for (int q = 1; q < 6; q++)
+	// Guardar o arquivo no vetor para desconsiderar tempo de
+	//  leitura de arquivo nos testes das estruturas
+	sprintf(f_path, "Entradas/entrada-%d.txt", 5);
+	file = std::ifstream(f_path, std::ifstream::in);
+	file >> n;
+	wholeFile = std::vector<Data>(n);
+	for (int i = 0; i < n; i++)
 	{
-		// Guardar o arquivo no vetor para desconsiderar tempo de
-		//  leitura de arquivo nos testes das estruturas
-		sprintf(f_path, "Entradas/entrada-%d.txt", q);
-		file = std::ifstream(f_path, std::ifstream::in);
-		file >> n;
-		wholeFile = std::vector<Data>(n);
-		for (int i = 0; i < n; i++)
-		{
-			file >> d.ordem >> d.nome >> d.sobrenome;
-			wholeFile[i] = d;
-		}
+		file >> d.ordem >> d.nome >> d.sobrenome;
+		wholeFile[i] = d;
+	}
 
-		file >> m;
-		buscas = std::vector<Data>(m);
-		d.ordem = 0;
-		for (int i = 0; i < m; i++)
-		{
-			file >> d.nome >> d.sobrenome;
-			buscas[i] = d;
-		}
+	file >> m;
+	buscas = std::vector<Data>(m);
+	d.ordem = 0;
+	for (int i = 0; i < m; i++)
+	{
+		file >> d.nome >> d.sobrenome;
+		buscas[i] = d;
+	}
 
-		hset = HashSetD();
+	hset = HashSetD();
 
-		// HashSet - Inserção
-		for (int i = 0; i < n; i++)
-			hset.insert(wholeFile[i]);
+	// HashSet - Inserção
+	for (int i = 0; i < n; i++)
+		hset.insert(wholeFile[i]);
 
-		// HashSet - Medição da distribuição do hash
-		std::vector<int> ret = hset.get_dist_hash();
+	// HashSet - Medição da distribuição do hash
+	std::vector<int> ret = hset.get_dist_hash();
 
-		printf("Maior: %d Menor: %d\n", *std::max_element(ret.begin(), ret.end()), *std::min_element(ret.begin(), ret.end()));
+	//printf("Maior: %d Menor: %d\n", *std::max_element(ret.begin(), ret.end()), *std::min_element(ret.begin(), ret.end()));
 
-		// for(int i = 0; i < ret.size(); i++){
-		// 	printf("%d, %d\n", i, ret[i]);
-		// }
+	for(int i = 0; i < ret.size(); i++){
+	 	printf("%d, %d\n", i, ret[i]);
 	}
 
 	return 0;

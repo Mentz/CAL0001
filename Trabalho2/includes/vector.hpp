@@ -18,7 +18,7 @@ public:
 	int find(Data d){
 		for (int i = 0; i < v.size(); i++)
 			if (d == v[i])
-				return i;
+				return v[i].ordem;
 
 		return -1;
 	}
