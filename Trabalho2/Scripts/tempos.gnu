@@ -23,7 +23,7 @@ set title "Tempos de inserção e busca das estruturas de dados"
 set xlabel "Caso de teste por estrutura de dados" 
 set xlabel  offset character 0, -0.5, 0 font "" textcolor lt -1 norotate
 set ylabel "Tempo (segundos)"
-set ylabel  offset character 2, 0, 0 font ""
+set ylabel  offset character 1, 0, 0 font ""
 set yrange [*:*] noreverse nowriteback
 #DEBUG_TERM_HTIC = 119
 #DEBUG_TERM_VTIC = 119

@@ -2,7 +2,7 @@
 
 # Roda 1000 execuções e tira a média deles
 
-M=11
+M=1000
 
 for i in `seq 1 $M`; do
 	./main > Tempos/raw/run$i.csv
