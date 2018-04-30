@@ -10,8 +10,8 @@ all: clean build
 
 clean:
 	-rm $(OUTG)
+	-rm $(OUTH)
 	-rm $(OUT)
-	#-find Tempos/ -type f -delete
 
 build: $(FILE) $(FILEG)
 	g++ -o $(OUTG) $(FILEG) $(FLAGS)
@@ -21,6 +21,7 @@ build: $(FILE) $(FILEG)
 run: $(OUT) $(OUTG)
 	./$(OUTG)
 	./check_saidas.sh
+	./gera_grafico_dist_hash.sh
 	./$(OUT)
 	./benchmark.sh
 
