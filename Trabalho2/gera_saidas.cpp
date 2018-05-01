@@ -16,7 +16,7 @@
 #include <vector>
 #include "includes/structs.hpp"
 #include "includes/vector.hpp"
-#include "includes/avl.hpp"
+#include "includes/btree.hpp"
 #include "includes/hashset.hpp"
 #include "includes/hashtree.hpp"
 
@@ -30,9 +30,9 @@ int main(int argc, char ** argv)
 	std::ofstream saida1, saida2, saida3, saida4;
 
 	VectorD vec;
-	AVLD avl;
-	HashSetD hset;
-	HashTreeD htree;
+	BTreeD btr;
+	HashSetD hst;
+	HashTreeD htr;
 
 	for (int q = 1; q < 6; q++)
 	{
@@ -69,9 +69,9 @@ int main(int argc, char ** argv)
 		}
 
 		vec = VectorD();
-		avl = AVLD();
-		hset = HashSetD();
-		htree = HashTreeD();
+		btr = BTreeD();
+		hst = HashSetD();
+		htr = HashTreeD();
 
 		// TODO Embelezar esse código repetido
 		// Vector - inserção
@@ -84,27 +84,27 @@ int main(int argc, char ** argv)
 
 		// AVL - inserção
 		for (int i = 0; i < n; i++)
-			avl.insert(wholeFile[i]);
+			btr.insert(wholeFile[i]);
 
 		// AVL - busca
 		for (int i = 0; i < m; i++)
-			saida2 << avl.find(buscas[i]) << "\n";
+			saida2 << btr.find(buscas[i]) << "\n";
 
 		// HashSet - inserção
 		for (int i = 0; i < n; i++)
-			hset.insert(wholeFile[i]);
+			hst.insert(wholeFile[i]);
 
 		// HashSet - busca
 		for (int i = 0; i < m; i++)
-			saida3 << hset.find(buscas[i]) << "\n";
+			saida3 << hst.find(buscas[i]) << "\n";
 
 		// HashTree - inserção
 		for (int i = 0; i < n; i++)
-			htree.insert(wholeFile[i]);
+			htr.insert(wholeFile[i]);
 
 		// HashTree - busca
 		for (int i = 0; i < m; i++)
-			saida4 << htree.find(buscas[i]) << "\n";
+			saida4 << htr.find(buscas[i]) << "\n";
 	}
 
 	return 0;

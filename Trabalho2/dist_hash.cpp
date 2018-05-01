@@ -8,7 +8,6 @@
 ****************************/
 
 #include <cstdio>
-#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -16,10 +15,7 @@
 #include <vector>
 #include <algorithm>
 #include "includes/structs.hpp"
-#include "includes/vector.hpp"
-#include "includes/avl.hpp"
 #include "includes/hashset.hpp"
-#include "includes/hashtree.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -29,7 +25,7 @@ int main(int argc, char ** argv)
 	std::vector<Data> wholeFile, buscas;
 	std::ifstream file;
 
-	HashSetD hset;
+	HashSetD hst;
 	// Guardar o arquivo no vetor para desconsiderar tempo de
 	//  leitura de arquivo nos testes das estruturas
 	sprintf(f_path, "Entradas/entrada-%d.txt", 5);
@@ -51,14 +47,14 @@ int main(int argc, char ** argv)
 		buscas[i] = d;
 	}
 
-	hset = HashSetD();
+	hst = HashSetD();
 
 	// HashSet - Inserção
 	for (int i = 0; i < n; i++)
-		hset.insert(wholeFile[i]);
+		hst.insert(wholeFile[i]);
 
 	// HashSet - Medição da distribuição do hash
-	std::vector<int> ret = hset.get_dist_hash();
+	std::vector<int> ret = hst.get_dist_hash();
 
 	//printf("Maior: %d Menor: %d\n", *std::max_element(ret.begin(), ret.end()), *std::min_element(ret.begin(), ret.end()));
 

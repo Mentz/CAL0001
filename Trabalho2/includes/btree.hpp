@@ -1,15 +1,15 @@
-#ifndef _I_AVL_
-#define _I_AVL_
+#ifndef _I_BTREE_
+#define _I_BTREE_
 
 #include "structs.hpp"
 
-class AVLD : DataStructure {
+class BTreeD : DataStructure {
 private:
-	// TODO Mudar para uma AVL de verdade
+	// std::map usa internamente uma Árvore Rubro-Negra
 	std::map<std::pair<std::string, std::string>, int> m;
 
 public:
-	AVLD(){};
+	BTreeD(){};
 
 	void insert(Data d)
 	{

@@ -27,4 +27,4 @@ set ylabel  offset character 1, 0, 0 font ""
 set yrange [*:*] noreverse nowriteback
 #DEBUG_TERM_HTIC = 119
 #DEBUG_TERM_VTIC = 119
-plot newhistogram "Vetor", 'Tempos/average.dat' using "vet-ins":xtic(1) t col, '' u "vet-fnd" t col, newhistogram "AVL", '' u "avl-ins":xtic(1) t col, '' u "avl-fnd" t col, newhistogram "HashSet", '' u "hst-ins":xtic(1) t col, '' u "hst-fnd" t col, newhistogram "HashTree", '' u "htr-ins":xtic(1) t col, '' u "htr-fnd" t col
+plot newhistogram "Vector", 'Tempos/average.dat' using "vet-ins":xtic(1) t col, '' u "vet-fnd" t col, newhistogram "BTree", '' u "btr-ins":xtic(1) t col, '' u "btr-fnd" t col, newhistogram "HashSet", '' u "hst-ins":xtic(1) t col, '' u "hst-fnd" t col, newhistogram "HashTree", '' u "htr-ins":xtic(1) t col, '' u "htr-fnd" t col

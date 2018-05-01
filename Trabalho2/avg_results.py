@@ -5,9 +5,9 @@ import csv
 vetins = [0.0000000]*5
 vetfnd = [0.0000000]*5
 vettot = [0.0000000]*5
-avlins = [0.0000000]*5
-avlfnd = [0.0000000]*5
-avltot = [0.0000000]*5
+btrins = [0.0000000]*5
+btrfnd = [0.0000000]*5
+btrtot = [0.0000000]*5
 hstins = [0.0000000]*5
 hstfnd = [0.0000000]*5
 hsttot = [0.0000000]*5
@@ -27,25 +27,26 @@ for i in range(1, m+1):
 		for row in run:
 			vetins[c] += float(row['vet-ins'])
 			vetfnd[c] += float(row['vet-fnd'])
-			vettot[c] += vetins[c] + vetfnd[c]
-			avlins[c] += float(row['avl-ins'])
-			avlfnd[c] += float(row['avl-fnd'])
-			avltot[c] += avlins[c] + avlfnd[c]
+			btrins[c] += float(row['btr-ins'])
+			btrfnd[c] += float(row['btr-fnd'])
 			hstins[c] += float(row['hst-ins'])
 			hstfnd[c] += float(row['hst-fnd'])
-			hsttot[c] += hstins[c] + hstfnd[c]
 			htrins[c] += float(row['htr-ins'])
 			htrfnd[c] += float(row['htr-fnd'])
-			htrtot[c] += htrins[c] + htrfnd[c]
 			c = c + 1
+	for j in range(0, 5):
+		vettot[j] += vetins[j] + vetfnd[j]
+		btrtot[j] += btrins[j] + btrfnd[j]
+		hsttot[j] += hstins[j] + hstfnd[j]
+		htrtot[j] += htrins[j] + htrfnd[j]
 
 for i in range(0, 5):
 	vetins[i] /= m
 	vetfnd[i] /= m
 	vettot[i] /= m
-	avlins[i] /= m
-	avlfnd[i] /= m
-	avltot[i] /= m
+	btrins[i] /= m
+	btrfnd[i] /= m
+	btrtot[i] /= m
 	hstins[i] /= m
 	hstfnd[i] /= m
 	hsttot[i] /= m
@@ -55,19 +56,22 @@ for i in range(0, 5):
 
 
 # Impressao para stdout dos valores de saida
-print("teste vet-ins vet-fnd vet-tot avl-ins avl-fnd avl-tot hst-ins hst-fnd hst-tot htr-ins htr-fnd htr-tot")
+#print("teste vet-ins vet-fnd vet-tot btr-ins btr-fnd btr-tot hst-ins hst-fnd hst-tot htr-ins htr-fnd htr-tot")
+print("teste vet-ins vet-fnd btr-ins btr-fnd hst-ins hst-fnd htr-ins htr-fnd")
 for i in range(0, 5):
-	print("%s %s %s %s %s %s %s %s %s %s %s %s %s" % (
+	#print("%s %s %s %s %s %s %s %s %s %s %s %s %s" % (
+	print("%s %s %s %s %s %s %s %s %s" % (
 		str(i + 1),
 		str.format("%1.6f" % vetins[i]),
 		str.format("%1.6f" % vetfnd[i]),
-		str.format("%1.6f" % vettot[i]),
-		str.format("%1.6f" % avlins[i]),
-		str.format("%1.6f" % avlfnd[i]),
-		str.format("%1.6f" % avltot[i]),
+		#str.format("%1.6f" % vettot[i]),
+		str.format("%1.6f" % btrins[i]),
+		str.format("%1.6f" % btrfnd[i]),
+		#str.format("%1.6f" % btrtot[i]),
 		str.format("%1.6f" % hstins[i]),
 		str.format("%1.6f" % hstfnd[i]),
-		str.format("%1.6f" % hsttot[i]),
+		#str.format("%1.6f" % hsttot[i]),
 		str.format("%1.6f" % htrins[i]),
 		str.format("%1.6f" % htrfnd[i]),
-		str.format("%1.6f" % htrtot[i])))
+		#str.format("%1.6f" % htrtot[i])
+		))

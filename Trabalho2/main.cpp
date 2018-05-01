@@ -16,7 +16,7 @@
 #include <vector>
 #include "includes/structs.hpp"
 #include "includes/vector.hpp"
-#include "includes/avl.hpp"
+#include "includes/btree.hpp"
 #include "includes/hashset.hpp"
 #include "includes/hashtree.hpp"
 
@@ -31,12 +31,12 @@ int main(int argc, char ** argv)
 	double times[8] = {0};
 
 	VectorD vec;
-	AVLD avl;
-	HashSetD hset;
-	HashTreeD htree;
+	BTreeD btr;
+	HashSetD hst;
+	HashTreeD htr;
 
 	printf("%s,%s,%s,%s,%s,%s,%s,%s\n",
-			"vet-ins", "vet-fnd", "avl-ins", "avl-fnd",
+			"vet-ins", "vet-fnd", "btr-ins", "btr-fnd",
 			"hst-ins", "hst-fnd", "htr-ins", "htr-fnd");
 	for (int q = 1; q < 6; q++)
 	{
@@ -62,9 +62,9 @@ int main(int argc, char ** argv)
 		}
 
 		vec = VectorD();
-		avl = AVLD();
-		hset = HashSetD();
-		htree = HashTreeD();
+		btr = BTreeD();
+		hst = HashSetD();
+		htr = HashTreeD();
 
 		// TODO Embelezar esse código repetido
 		// Vector - Medição da inserção
@@ -85,42 +85,42 @@ int main(int argc, char ** argv)
 		// AVL - Medição da inserção
 		t0 = clock();
 		for (int i = 0; i < n; i++)
-			avl.insert(wholeFile[i]);
+			btr.insert(wholeFile[i]);
 		t1 = clock();
 		times[2] = getSeconds(t0, t1);
 
 		// AVL - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++)
-			avl.find(buscas[i]);
+			btr.find(buscas[i]);
 		t1 = clock();
 		times[3] = getSeconds(t0, t1);
 
 		// HashSet - Medição da inserção
 		t0 = clock();
 		for (int i = 0; i < n; i++)
-			hset.insert(wholeFile[i]);
+			hst.insert(wholeFile[i]);
 		t1 = clock();
 		times[4] = getSeconds(t0, t1);
 
 		// HashSet - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++)
-			hset.find(buscas[i]);
+			hst.find(buscas[i]);
 		t1 = clock();
 		times[5] = getSeconds(t0, t1);
 
 		// HashTree - Medição da inserção
 		t0 = clock();
 		for (int i = 0; i < n; i++)
-			htree.insert(wholeFile[i]);
+			htr.insert(wholeFile[i]);
 		t1 = clock();
 		times[6] = getSeconds(t0, t1);
 
 		// HashTree - Medição da busca
 		t0 = clock();
 		for (int i = 0; i < m; i++)
-			htree.find(buscas[i]);
+			htr.find(buscas[i]);
 		t1 = clock();
 		times[7] = getSeconds(t0, t1);
 
