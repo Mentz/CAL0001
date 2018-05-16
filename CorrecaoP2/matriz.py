@@ -19,11 +19,11 @@ def calculaBairrosRicos(matriz, p):
 
 if __name__ == "__main__":
 	p = 2
-	mat = [[2,  5],
-		   [2, 14, 5, 4],
-		   [14, 34],
-		   [5, 5, 58],
-		   [4, 34, 58]]
+	mat = [[0,  2,  0,  5,  0],
+		   [2,  0, 14,  5,  4],
+		   [0, 14,  0,  0, 34],
+		   [5,  5,  0,  0, 58],
+		   [0,  4, 34, 58,  0]]
 	viz = calculaBairrosRicos(mat, p)
 	print(p),
 	print("vizinhancas mais ricas:")
