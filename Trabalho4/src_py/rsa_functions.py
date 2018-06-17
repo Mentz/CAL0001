@@ -42,6 +42,18 @@ def modexp(base, exp, mod):
 
 
 '''
+euclid(a, b)
+retorna o máximo divisor comum (mdc) entre a e b
+'''
+def euclid(a, b):
+	if a < b:
+		return euclid(b, a)
+	if b == 0:
+		return a
+	return euclid(b, a-b)
+
+
+'''
 fermat(candidato, tentativas)
 retorna True se candidato é possível primo ou
 False se candidato eh nao-primo
@@ -67,3 +79,17 @@ def witness(p):
 	if left != right:
 		print("falso com a = {}".format(a))
 	return left == right
+
+
+'''
+gerapublickey(p, q)
+retorna uma chave pública composta de um natural (e)
+e o produto de (p*q = n)
+'''
+def gerapublickey(p, q):
+	n = (p-1)*(q-1)
+	while True:
+		e = random.random(2, min(p, q)) # se ficar lento, fixe e=65537
+		if euclid(e, n) == 1:
+			return (e, n)
+
