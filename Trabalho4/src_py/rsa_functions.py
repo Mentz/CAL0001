@@ -188,15 +188,17 @@ def rsa_encrypt(texto, pubkey):
 	codedsegment = 0
 	btext = bytes(texto, "utf-8")
 	bsize = int(math.ceil(math.log2(n) / 8.0))
+	bstext = [btext[i:i+bsize] for i in range(0, len(btext), bsize)]
 	encodedbytes = []
-	for i in range(0, len(btext), bsize):
+	for i in range(0, len(bstext)):
 		segment = 0
 		for j in range(0, bsize):
 			segment = segment << 8
-			if i+j < len(btext):
-				segment += btext[i + j]
-			print(bin(segment))
+			if len(bstext[i]) > j:
+				segment += bstext[i][j]
+		print(bin(segment))
 		codedsegment = modexp(segment, e, n)
+		# Isso se torna um conjunto de bytes
 		for j in range(0, bsize):
 			print(bin(codedsegment % (2**8)))
 			encodedbytes.append(codedsegment % (2**8))
@@ -219,14 +221,15 @@ def rsa_decrypt(texto, privkey):
 	d,n = privkey
 	segment = 0
 	decodedsegment = 0
-	btext = texto
+	btext = bytes(texto)
 	bsize = int(math.ceil(math.log2(n) / 8.0))
+	bstext = [btext[i:i+bsize] for i in range(0, len(btext), bsize)]
 	decodedbytes = []
-	for i in range(0, len(btext), bsize):
+	for i in range(0, len(bstext)):
 		segment = 0
 		for j in range(0, bsize):
 			segment = segment << 8
-			segment += btext[i + j]
+			segment += bstext[i][j]
 			print(bin(segment))
 		decodedsegment = modexp(segment, d, n)
 		for j in range(0, bsize):
