@@ -152,6 +152,11 @@ def rsa_createkeys(bits):
 	número obtido for um primo, usa ele para geração
 	de chaves de RSA
 	'''
+	if bits < 16:
+		print('Tamanho de chave muito pequeno. Informe' +
+		      ' um valor >= 16.')
+		return ((0,0),(0,0))
+	
 	bits /= 2
 	tries = 20
 	while True:
@@ -180,33 +185,24 @@ retorna a string gerada
 '''
 def rsa_encrypt(texto, pubkey):
 	'''
-	Contamos que cada char é do tamanho de um byte,
-	ou seja, 8 bits.
+	Cada char tem 8 bits. UTF-8 pode ser codificado em
+	ASCII (8 bits), e é assim que tratamos o texto.
+	Por motivos de que não conseguimos fazer funcionar
+	criptografia em blocos de caracteres (seria o ideal)
+	fizemos criptografia char a char.
 	'''
 	e,n = pubkey
-	segment = 0
-	codedsegment = 0
 	btext = bytes(texto, "utf-8")
-	bsize = int(math.ceil(math.log2(n) / 8.0))
-	bstext = [btext[i:i+bsize] for i in range(0, len(btext), bsize)]
-	encodedbytes = []
-	for i in range(0, len(bstext)):
-		segment = 0
-		for j in range(0, bsize):
-			segment = segment << 8
-			if len(bstext[i]) > j:
-				segment += bstext[i][j]
-		print(bin(segment))
-		codedsegment = modexp(segment, e, n)
-		# Isso se torna um conjunto de bytes
-		for j in range(0, bsize):
-			print(bin(codedsegment % (2**8)))
-			encodedbytes.append(codedsegment % (2**8))
-			codedsegment = codedsegment >> 8
-	encoded = bytes(encodedbytes)
+	coded = []
+	for i in range(0, len(btext)):
+		seg = btext[i]
+		print(seg, end=' ')
+		cseg = modexp(seg, e, n)
+		print('-> ' + str(cseg))
+		coded.append(cseg)
+	encoded = coded
 
 	return encoded
-
 
 '''
 rsa_decrypt(texto, privkey)
@@ -219,23 +215,15 @@ def rsa_decrypt(texto, privkey):
 	ou seja, 8 bits.
 	'''
 	d,n = privkey
-	segment = 0
-	decodedsegment = 0
-	btext = bytes(texto)
-	bsize = int(math.ceil(math.log2(n) / 8.0))
-	bstext = [btext[i:i+bsize] for i in range(0, len(btext), bsize)]
-	decodedbytes = []
-	for i in range(0, len(bstext)):
-		segment = 0
-		for j in range(0, bsize):
-			segment = segment << 8
-			segment += bstext[i][j]
-			print(bin(segment))
-		decodedsegment = modexp(segment, d, n)
-		for j in range(0, bsize):
-			print(bin(decodedsegment % (2**8)))
-			decodedbytes.append(decodedsegment % (2**8))
-			decodedsegment = decodedsegment >> 8
-	decoded = bytes(decodedbytes)
+	ctext = texto
+	plain = []
+	for i in range(0, len(ctext)):
+		seg = ctext[i]
+		print(seg, end=' ')
+		dseg = modexp(seg, d, n)
+		print('-> ' + str(dseg))
+		plain.append(dseg)
+	decoded = bytes(plain)
+	decoded = str(decoded, 'utf-8')
 
 	return decoded
