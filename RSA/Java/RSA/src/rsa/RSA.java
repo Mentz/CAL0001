@@ -113,7 +113,6 @@ public class RSA {
     
     public static BigInteger modLinSolver(BigInteger a, BigInteger b, BigInteger n){
         ExtEuclides ret = extEuclides(a, n);
-        System.out.println(ret);
         BigInteger x0 = null;
         if(b.mod(ret.d).compareTo(BigInteger.ZERO) == 0){
             x0 = ret.x.multiply(b.divide(ret.d)).mod(n);
@@ -191,31 +190,109 @@ public class RSA {
         BigInteger m = (p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)));
         BigInteger d = modLinSolver(e, BigInteger.ONE, m);
         return new PrivateKey(d, n);
-    }   
+    }
     
+    public static ArrayList<BigInteger> calcNumBloco(String msg, BigInteger n, int numBloco){
+        boolean flag = false;
+        ArrayList<BigInteger> ret = new ArrayList<>();
+        while(numBloco > 1){
+            flag = true;
+            ret.clear();
+            for(int j = 0; j < msg.length(); j += numBloco){
+                String res = "";
+                for(int i = 0; i + j < msg.length() && i < numBloco; i++){
+                    String tmp = Integer.toBinaryString((int)msg.charAt(i + j));
+                    while(tmp.length() != 8){
+                        tmp = "0" + tmp;
+                    }
+                    res += tmp;
+                }
+                while(res.length() != 8 * numBloco){
+                    res += "0";
+                }
+                BigInteger tot = new BigInteger(res, 2);
+                if(tot.compareTo(n) == 1){
+                    flag = false;
+                } else {
+                    ret.add(tot);
+                }
+            }
+            if(flag){
+                return ret;
+            }
+            numBloco--;
+        }
+        return ret;
+    }
+    
+    public static ArrayList<BigInteger> criptografa(String msg, PublicKey pkey, int numBloco){
+        ArrayList<BigInteger> blocos = calcNumBloco(msg, pkey.n, numBloco);
+        ArrayList<BigInteger> msgEncryp = new ArrayList<>();
+        for(BigInteger b : blocos){
+            msgEncryp.add(expModular(b, pkey.e, pkey.n));
+        }
+        return msgEncryp;
+    }
+    
+    public static String descriptografa(ArrayList<BigInteger> msgEncryp, PrivateKey pkey){
+        String res = "";
+        for(BigInteger b : msgEncryp){
+            BigInteger desc = expModular(b, pkey.d, pkey.n);
+            String msgBinary = desc.toString(2);
+            while(msgBinary.length() % 8 != 0){
+                msgBinary = "0" + msgBinary;
+            }
+            for(int i = 0; i < msgBinary.length(); i += 8){
+                String tmp = "";
+                for(int j = 0; i + j < msgBinary.length() && j < 8; j++){
+                    tmp += msgBinary.charAt(i + j);
+                }
+                int value = Integer.parseInt(tmp, 2);
+                if(value > 0){
+                    res += (char)(value);
+                }
+            }
+        }
+        return res;
+    }
+    
+    public static void breakCrypt(PublicKey pkey){
+        for(BigInteger p = new BigInteger("2"); p.compareTo(pkey.n) == -1; p = p.add(BigInteger.ONE)){
+            if(pkey.n.mod(p) == BigInteger.ZERO){
+                BigInteger q = pkey.n.divide(p);
+                if(fermat(p, 100) && fermat(q, 100)){
+                    BigInteger m = (p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)));
+                    if(euclides(pkey.e, m).equals(BigInteger.ONE)){
+                        System.out.println("Quebrado!!! P: " + p + " Q: " + q);
+                        break;
+                    }
+                }
+            }
+        }
+    } 
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         
-        System.out.println("Expo modular 2^10: " + expModular(new BigInteger("2"), new BigInteger("10"), new BigInteger("10000000007")));
-        System.out.println("Euclides 128 64: " + euclides(new BigInteger("128"), new BigInteger("64")));
-        ExtEuclides teste = extEuclides(new BigInteger("1914"), new BigInteger("899"));
-        System.out.println("ExtEuclides 1914 e 899: " + teste);
-        System.out.println("Fermat para 1000000007: " + fermat(new BigInteger("1000000011"), 100));
-        System.out.println("ModLinSolve 227 e 198640: " + modLinSolver(new BigInteger("227"), BigInteger.ONE, new BigInteger("198640")));
-        BigInteger[] ret = PQ(8);
-        System.out.println("Primo 1: " + ret[0] + " Primo 2: " + ret[1]);
-        
-        PublicKey pubKey = geraPublicKey(ret[0], ret[1]);
-        System.out.println(pubKey);
-        PrivateKey privKey = geraPrivateKey(pubKey.e, ret[0], ret[1]);
-        System.out.println(privKey);
-        BigInteger tmp = expModular(new BigInteger("15"), pubKey.e, pubKey.n);
-        System.out.println(tmp);
-        BigInteger retorno = expModular(tmp, privKey.d, privKey.n);
-        System.out.println(retorno);
+//        System.out.println("Expo modular 2^10: " + expModular(new BigInteger("2"), new BigInteger("10"), new BigInteger("10000000007")));
+//        System.out.println("Euclides 128 64: " + euclides(new BigInteger("128"), new BigInteger("64")));
+//        ExtEuclides teste = extEuclides(new BigInteger("1914"), new BigInteger("899"));
+//        System.out.println("ExtEuclides 1914 e 899: " + teste);
+//        System.out.println("Fermat para 1000000007: " + fermat(new BigInteger("1000000011"), 100));
+//        System.out.println("ModLinSolve 227 e 198640: " + modLinSolver(new BigInteger("227"), BigInteger.ONE, new BigInteger("198640")));
+//        BigInteger[] ret = PQ(64);
+//        System.out.println("Primo 1: " + ret[0] + " Primo 2: " + ret[1]);
+//        
+//        PublicKey pubKey = geraPublicKey(ret[0], ret[1]);
+//        System.out.println(pubKey);
+//        PrivateKey privKey = geraPrivateKey(pubKey.e, ret[0], ret[1]);
+//        System.out.println(privKey);
+//        BigInteger tmp = expModular(new BigInteger("123456789"), pubKey.e, pubKey.n);
+//        System.out.println(tmp);
+//        BigInteger retorno = expModular(tmp, privKey.d, privKey.n);
+//        System.out.println(retorno);
         
 //        PublicKey tt = geraPublicKey(new BigInteger("521"), new BigInteger("383"));
 //        tt.e = new BigInteger("227");
@@ -228,6 +305,19 @@ public class RSA {
 //        System.out.println(tmp);
 //        BigInteger retorno = expModular(tmp, pt.d, pt.n);
 //        System.out.println(retorno);
+
+          BigInteger[] pq = PQ(32);
+          PublicKey pubKey = geraPublicKey(pq[0], pq[1]);
+          PrivateKey privKey = geraPrivateKey(pubKey.e, pq[0], pq[1]);
+          String msg = "RSA é legal mas é meio chato de implementar pq na implementação padrão as frases não podem ser muito compridas, requerindo como \"workaround\" a divisão do conteúdo em blocos de tamanho menor do que o tamanho da chave de criptografia.";
+          ArrayList<BigInteger> msgEncryp = criptografa(msg, pubKey, 10);
+          String volta = descriptografa(msgEncryp, privKey);
+          
+          System.out.println("Poriginal: " + pq[0] + "  Qoriginal: " + pq[1]);
+          
+          breakCrypt(pubKey);
+          
+          System.out.println(volta);
         
     }
     
