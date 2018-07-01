@@ -113,6 +113,7 @@ public class RSA {
     
     public static BigInteger modLinSolver(BigInteger a, BigInteger b, BigInteger n){
         ExtEuclides ret = extEuclides(a, n);
+        System.out.println(ret);
         BigInteger x0 = null;
         if(b.mod(ret.d).compareTo(BigInteger.ZERO) == 0){
             x0 = ret.x.multiply(b.divide(ret.d)).mod(n);
@@ -173,14 +174,14 @@ public class RSA {
         
         Random rand = new Random();
         
-        BigInteger e;
+        BigInteger e = new BigInteger("65537");
         
-        while(true){
-            e = new BigInteger(primos.get(rand.nextInt(primos.size() - 1)).toString());
-            if(euclides(e, m).compareTo(BigInteger.ONE) == 0){
-                break;
-            }
-        }
+//        while(true){
+//            e = new BigInteger(primos.get(rand.nextInt(primos.size() - 1)).toString());
+//            if(euclides(e, m).compareTo(BigInteger.ONE) == 0){
+//                break;
+//            }
+//        }
         
         return new PublicKey(e, n);
     }
@@ -188,7 +189,7 @@ public class RSA {
     public static PrivateKey geraPrivateKey(BigInteger e, BigInteger p, BigInteger q){
         BigInteger n = p.multiply(q);
         BigInteger m = (p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)));
-        BigInteger d = modLinSolver(e, BigInteger.ONE, n);
+        BigInteger d = modLinSolver(e, BigInteger.ONE, m);
         return new PrivateKey(d, n);
     }   
     
@@ -206,15 +207,27 @@ public class RSA {
         System.out.println("ModLinSolve 227 e 198640: " + modLinSolver(new BigInteger("227"), BigInteger.ONE, new BigInteger("198640")));
         BigInteger[] ret = PQ(8);
         System.out.println("Primo 1: " + ret[0] + " Primo 2: " + ret[1]);
+        
         PublicKey pubKey = geraPublicKey(ret[0], ret[1]);
         System.out.println(pubKey);
         PrivateKey privKey = geraPrivateKey(pubKey.e, ret[0], ret[1]);
         System.out.println(privKey);
-        
         BigInteger tmp = expModular(new BigInteger("15"), pubKey.e, pubKey.n);
         System.out.println(tmp);
         BigInteger retorno = expModular(tmp, privKey.d, privKey.n);
         System.out.println(retorno);
+        
+//        PublicKey tt = geraPublicKey(new BigInteger("521"), new BigInteger("383"));
+//        tt.e = new BigInteger("227");
+//        System.out.println(tt);
+//        PrivateKey ttt = geraPrivateKey(tt.e, new BigInteger("521"), new BigInteger("383"));
+//        System.out.println(ttt);
+//        PublicKey t = new PublicKey(new BigInteger("227"), new BigInteger("199543"));
+//        PrivateKey pt = new PrivateKey(new BigInteger("105883"), new BigInteger("199543"));
+//        BigInteger tmp = expModular(new BigInteger("113"), t.e, t.n);
+//        System.out.println(tmp);
+//        BigInteger retorno = expModular(tmp, pt.d, pt.n);
+//        System.out.println(retorno);
         
     }
     
