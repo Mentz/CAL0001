@@ -121,7 +121,7 @@ public class RSA {
     }
     
     public static BigInteger[] PQ(int numBits){
-        //numBits /= 2;
+        numBits /= 2;
         BigInteger[] ret = new BigInteger[2];
         Random rand = new Random();
         boolean flag = false;
@@ -149,14 +149,14 @@ public class RSA {
         boolean[] ehPrimo = new boolean[limite + 5];
         Arrays.fill(ehPrimo, true);
         
-        primos.add(new Integer(2));
+        primos.add(2);
         ehPrimo[0] = ehPrimo[1] = false;
         for(int i = 4; i <= limite; i += 2){
             ehPrimo[i] = false;
         }
         for(long i = 3; i <= limite; i += 2){
             if(ehPrimo[(int)i]){
-                primos.add(new Integer((int)i));
+                primos.add((int)i);
                 for(long j =  i * i; j <= limite; j += i){
                     ehPrimo[(int)j] = false;
                 }
@@ -173,14 +173,15 @@ public class RSA {
         
         Random rand = new Random();
         
-        BigInteger e;
-        
+        BigInteger e = new BigInteger("65537");
+        /*
         while(true){
             e = new BigInteger(primos.get(rand.nextInt(primos.size() - 1)).toString());
             if(euclides(e, m).compareTo(BigInteger.ONE) == 0){
                 break;
             }
         }
+        */
         
         return new PublicKey(e, n);
     }
@@ -204,7 +205,7 @@ public class RSA {
         System.out.println("ExtEuclides 1914 e 899: " + teste);
         System.out.println("Fermat para 1000000007: " + fermat(new BigInteger("1000000011"), 100));
         System.out.println("ModLinSolve 227 e 198640: " + modLinSolver(new BigInteger("227"), BigInteger.ONE, new BigInteger("198640")));
-        BigInteger[] ret = PQ(8);
+        BigInteger[] ret = PQ(32);
         System.out.println("Primo 1: " + ret[0] + " Primo 2: " + ret[1]);
         PublicKey pubKey = geraPublicKey(ret[0], ret[1]);
         System.out.println(pubKey);
@@ -212,9 +213,9 @@ public class RSA {
         System.out.println(privKey);
         
         BigInteger tmp = expModular(new BigInteger("15"), pubKey.e, pubKey.n);
-        System.out.println(tmp);
+        System.out.println("Original  : 15\nEncriptado: " + tmp);
         BigInteger retorno = expModular(tmp, privKey.d, privKey.n);
-        System.out.println(retorno);
+        System.out.println("Decriptado: " + retorno);
         
     }
     
