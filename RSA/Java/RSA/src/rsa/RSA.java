@@ -5,7 +5,10 @@
  */
 package rsa;
 
+import static java.lang.Integer.min;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -25,6 +28,35 @@ class ExtEuclides {
     @Override
     public String toString (){
         return (new String("D: " + this.d + " X: " + this.x + " Y: " + this.y));
+    }
+}
+
+class PublicKey {
+    BigInteger e, n;
+
+    public PublicKey(BigInteger e, BigInteger n) {
+        this.e = e;
+        this.n = n;
+    }
+    
+    @Override
+    public String toString(){
+        return (new String("E: " + this.e + " N: " + this.n));
+    }
+    
+}
+
+class PrivateKey{
+    BigInteger d, n;
+
+    public PrivateKey(BigInteger d, BigInteger n){
+        this.d = d;
+        this.n = n;
+    }
+    
+    @Override
+    public String toString(){
+        return (new String("D: " + this.d + " N: " + this.n));
     }
 }
 
@@ -89,24 +121,77 @@ public class RSA {
     }
     
     public static BigInteger[] PQ(int numBits){
+        //numBits /= 2;
         BigInteger[] ret = new BigInteger[2];
         Random rand = new Random();
         boolean flag = false;
         while(!flag){
             ret[0] = new BigInteger(numBits, rand);
-            if(fermat(ret[0], 100) == true){
+            if(fermat(ret[0], 100) == true && ret[0].compareTo(BigInteger.ONE) == 1){
                 flag = true;
             }
         }
         flag = false;
         while(!flag){
             ret[1] = new BigInteger(numBits, rand);
-            if(fermat(ret[1], 100) == true && euclides(ret[0], ret[1]).compareTo(BigInteger.ONE) == 0){
+            if(fermat(ret[1], 100) == true && ret[1].compareTo(BigInteger.ONE) == 1 && euclides(ret[0], ret[1]).compareTo(BigInteger.ONE) == 0){
                 flag = true;
             }
         }
         return ret;
     }
+    
+    public static ArrayList<Integer> crivo(int limite){
+        if(limite < 0){
+            limite = 5000000;
+        }
+        ArrayList<Integer> primos = new ArrayList<>();
+        boolean[] ehPrimo = new boolean[limite + 5];
+        Arrays.fill(ehPrimo, true);
+        
+        primos.add(new Integer(2));
+        ehPrimo[0] = ehPrimo[1] = false;
+        for(int i = 4; i <= limite; i += 2){
+            ehPrimo[i] = false;
+        }
+        for(long i = 3; i <= limite; i += 2){
+            if(ehPrimo[(int)i]){
+                primos.add(new Integer((int)i));
+                for(long j =  i * i; j <= limite; j += i){
+                    ehPrimo[(int)j] = false;
+                }
+            }
+        }
+        return primos;
+    }
+    
+    public static PublicKey geraPublicKey(BigInteger p, BigInteger q){
+        BigInteger n = p.multiply(q);
+        BigInteger m = (p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)));
+        boolean flag = false;
+        ArrayList<Integer> primos = crivo(min(5000000, m.intValue()));
+        
+        Random rand = new Random();
+        
+        BigInteger e;
+        
+        while(true){
+            e = new BigInteger(primos.get(rand.nextInt(primos.size() - 1)).toString());
+            if(euclides(e, m).compareTo(BigInteger.ONE) == 0){
+                break;
+            }
+        }
+        
+        return new PublicKey(e, n);
+    }
+    
+    public static PrivateKey geraPrivateKey(BigInteger e, BigInteger p, BigInteger q){
+        BigInteger n = p.multiply(q);
+        BigInteger m = (p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE)));
+        BigInteger d = modLinSolver(e, BigInteger.ONE, n);
+        return new PrivateKey(d, n);
+    }   
+    
     
     /**
      * @param args the command line arguments
@@ -119,8 +204,18 @@ public class RSA {
         System.out.println("ExtEuclides 1914 e 899: " + teste);
         System.out.println("Fermat para 1000000007: " + fermat(new BigInteger("1000000011"), 100));
         System.out.println("ModLinSolve 227 e 198640: " + modLinSolver(new BigInteger("227"), BigInteger.ONE, new BigInteger("198640")));
-        BigInteger[] ret = PQ(40);
+        BigInteger[] ret = PQ(8);
         System.out.println("Primo 1: " + ret[0] + " Primo 2: " + ret[1]);
+        PublicKey pubKey = geraPublicKey(ret[0], ret[1]);
+        System.out.println(pubKey);
+        PrivateKey privKey = geraPrivateKey(pubKey.e, ret[0], ret[1]);
+        System.out.println(privKey);
+        
+        BigInteger tmp = expModular(new BigInteger("15"), pubKey.e, pubKey.n);
+        System.out.println(tmp);
+        BigInteger retorno = expModular(tmp, privKey.d, privKey.n);
+        System.out.println(retorno);
+        
     }
     
 }
