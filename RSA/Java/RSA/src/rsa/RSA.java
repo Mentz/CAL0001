@@ -121,7 +121,7 @@ public class RSA {
     }
     
     public static BigInteger[] PQ(int numBits){
-        //numBits /= 2;
+        numBits /= 2;
         BigInteger[] ret = new BigInteger[2];
         Random rand = new Random();
         boolean flag = false;
@@ -149,14 +149,14 @@ public class RSA {
         boolean[] ehPrimo = new boolean[limite + 5];
         Arrays.fill(ehPrimo, true);
         
-        primos.add(new Integer(2));
+        primos.add(2);
         ehPrimo[0] = ehPrimo[1] = false;
         for(int i = 4; i <= limite; i += 2){
             ehPrimo[i] = false;
         }
         for(long i = 3; i <= limite; i += 2){
             if(ehPrimo[(int)i]){
-                primos.add(new Integer((int)i));
+                primos.add((int)i);
                 for(long j =  i * i; j <= limite; j += i){
                     ehPrimo[(int)j] = false;
                 }
@@ -174,13 +174,14 @@ public class RSA {
         Random rand = new Random();
         
         BigInteger e = new BigInteger("65537");
-        
-//        while(true){
-//            e = new BigInteger(primos.get(rand.nextInt(primos.size() - 1)).toString());
-//            if(euclides(e, m).compareTo(BigInteger.ONE) == 0){
-//                break;
-//            }
-//        }
+        /*
+        while(true){
+            e = new BigInteger(primos.get(rand.nextInt(primos.size() - 1)).toString());
+            if(euclides(e, m).compareTo(BigInteger.ONE) == 0){
+                break;
+            }
+        }
+        */
         
         return new PublicKey(e, n);
     }
@@ -293,6 +294,7 @@ public class RSA {
 //        System.out.println(tmp);
 //        BigInteger retorno = expModular(tmp, privKey.d, privKey.n);
 //        System.out.println(retorno);
+
         
 //        PublicKey tt = geraPublicKey(new BigInteger("521"), new BigInteger("383"));
 //        tt.e = new BigInteger("227");
@@ -306,11 +308,11 @@ public class RSA {
 //        BigInteger retorno = expModular(tmp, pt.d, pt.n);
 //        System.out.println(retorno);
 
-          BigInteger[] pq = PQ(32);
+          BigInteger[] pq = PQ(64);
           PublicKey pubKey = geraPublicKey(pq[0], pq[1]);
           PrivateKey privKey = geraPrivateKey(pubKey.e, pq[0], pq[1]);
           String msg = "RSA é legal mas é meio chato de implementar pq na implementação padrão as frases não podem ser muito compridas, requerindo como \"workaround\" a divisão do conteúdo em blocos de tamanho menor do que o tamanho da chave de criptografia.";
-          ArrayList<BigInteger> msgEncryp = criptografa(msg, pubKey, 10);
+          ArrayList<BigInteger> msgEncryp = criptografa(msg, pubKey, 2);
           String volta = descriptografa(msgEncryp, privKey);
           
           System.out.println("Poriginal: " + pq[0] + "  Qoriginal: " + pq[1]);
